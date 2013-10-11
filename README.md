@@ -1,6 +1,6 @@
 # Swedbank.Client
 
-This is a very basic client to the swedish bank Swedbank (swedbank.se). It can login to your bank account using the civicnumber and private code that you specify.
+This is a very basic client to the swedish bank Swedbank (swedbank.se). It can login to your bank account using the civicnumber and private code that you specify and read your latest transactions.
 You have to apply for a private code via their web page first though.
 
 There are some app settings that needs to be supplied for it to work.
