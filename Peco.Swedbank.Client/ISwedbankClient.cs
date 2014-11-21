@@ -6,6 +6,6 @@ namespace Peco.Swedbank.Client
 {
 	public interface ISwedbankClient
 	{
-		Task<IEnumerable<TransactionDto>> GetTransactionsAsync();
+		Task<IEnumerable<TransactionDto>> GetTransactionsAsync(string accountId);
 	}
 }
