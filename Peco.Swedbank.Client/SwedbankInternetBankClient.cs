@@ -24,8 +24,7 @@ namespace Peco.Swedbank.Client
 		private readonly string _civicNumber;
 		private readonly string _password;
 
-		private readonly HttpClientHandler _clientHandler;
-		private readonly HttpClient _client;
+		private HttpClient _client;
 		private readonly ITransactionBuilder _transactionBuilder;
 
 		private class LoginContext
@@ -47,13 +46,12 @@ namespace Peco.Swedbank.Client
 			_civicNumber = civicNumber;
 			_password = password;
 			_transactionBuilder = transactionBuilder;
-
-			_clientHandler = new HttpClientHandler { CookieContainer = new CookieContainer() };
-			_client = new HttpClient(_clientHandler);
 		}
 
 		public async Task<IEnumerable<TransactionDto>> GetTransactionsAsync(string accountId)
 		{
+			CreateClient();
+
 			if(string.IsNullOrEmpty(accountId))
 			{
 				return Enumerable.Empty<TransactionDto>();
@@ -61,7 +59,7 @@ namespace Peco.Swedbank.Client
 
 			accountId = accountId.Trim();
 
-			var loginResponse = await Login(_clientHandler);
+			var loginResponse = await Login();
 			var landingPageContent = await loginResponse.Content.ReadAsStringAsync();
 
 			string url;
@@ -78,6 +76,11 @@ namespace Peco.Swedbank.Client
 			}
 
 			return _transactionBuilder.Build(await res.Content.ReadAsStringAsync());
+		}
+
+		private void CreateClient()
+		{
+			_client = new HttpClient(new HttpClientHandler {AllowAutoRedirect = false, CookieContainer = new CookieContainer()});
 		}
 
 		private static bool TryFindAccountUrl(string accountId, string html, out string url)
@@ -108,10 +111,8 @@ namespace Peco.Swedbank.Client
 			return await _client.SendAsync(request);
 		}
 
-		private async Task<HttpResponseMessage> Login(HttpClientHandler handler)
+		private async Task<HttpResponseMessage> Login()
 		{
-			handler.AllowAutoRedirect = false;
-
 			var context = new LoginContext();
 
 			await SendStartRequest(context);
