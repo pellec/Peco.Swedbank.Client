@@ -47,8 +47,8 @@ namespace Peco.Swedbank.Client.Helpers
 					continue;
 				}
 
-				string receiver = node.ChildNodes.Skip(7).First().ChildNodes.Skip(1).First().InnerHtml.Trim().Replace("&nbsp;", "");
-				string amount = node.ChildNodes.Skip(11).First().FirstChild.InnerHtml.Trim().Replace(" ", "").Replace(",", ".");
+				var receiver = node.ChildNodes.Skip(7).First().ChildNodes.Skip(1).First().InnerHtml.Trim().Replace("&nbsp;", "");
+				var amount = node.ChildNodes.Skip(11).First().FirstChild.InnerHtml.Trim().Replace(" ", "").Replace(",", ".");
 
 				var t = new TransactionDto
 				{

@@ -16,25 +16,34 @@ namespace Peco.Swedbank.Client
 		private const string LandingPageUrl = "https://internetbank.swedbank.se/bviPrivat/privat?_new_flow_=false";
 		private const string BaseUrl = "https://internetbank.swedbank.se/bviPrivat/privat";
 		private const string IdpUrl = "https://internetbank.swedbank.se/idp/portal";
+
 		private const string FirstLoginActionUrl = "https://internetbank.swedbank.se/idp/portal/identifieringidp/idp/dap1/ver=2.0/action/rparam=execution=e1s1";
+
 		private const string SecondLoginRequestUrl = "https://internetbank.swedbank.se/idp/portal/identifieringidp/idp/dap1/ver=2.0/rparam=execution=e1s2";
+
 		private const string SecondLoginActionUrl = "https://internetbank.swedbank.se/idp/portal/identifieringidp/idp/dap1/ver=2.0/action/rparam=execution=e1s2";
+
 		private const string ThirdLoginRequestUrl = "https://internetbank.swedbank.se/idp/portal/identifieringidp/idp/dap1/ver=2.0/rparam=execution=e1s3";
+
 		private const string ThirdLoginActionUrl = "https://internetbank.swedbank.se/idp/portal/identifieringidp/idp/dap1/ver=2.0/action/rparam=execution=e1s3";
+
 		private const string FourthLoginRequestUrl = "https://internetbank.swedbank.se/idp/portal/identifieringidp/idp/dap1/ver=2.0/rparam=execution=e1s4";
+
 		private const string WaitForLoginPollingUrl = "https://internetbank.swedbank.se/idp/portal/identifieringidp/busresponsecheck/main-dapPortalWindowId";
 
-		private readonly int _nbrOfTimesToCheckIfLoginIsDone;
 		private readonly int _nbrOfSecondsToWaitBetweenLoginChecks;
 
-		private HttpClient _client;
+		private readonly int _nbrOfTimesToCheckIfLoginIsDone;
 		private readonly ITransactionBuilder _transactionBuilder;
 
-		public SwedbankMobileBankIdClient() :this(5, 6, new SwedbankHtmlTransactionBuilder(new TransactionDtoGenerateId()))
+		private HttpClient _client;
+
+		public SwedbankMobileBankIdClient() : this(5, 6, new SwedbankHtmlTransactionBuilder(new TransactionDtoGenerateId()))
 		{
 		}
 
-		public SwedbankMobileBankIdClient(int nbrOfTimesToCheckIfLoginIsDone, int nbrOfSecondsToWaitBetweenLoginChecks, ITransactionBuilder transactionBuilder)
+		public SwedbankMobileBankIdClient(int nbrOfTimesToCheckIfLoginIsDone, int nbrOfSecondsToWaitBetweenLoginChecks,
+			ITransactionBuilder transactionBuilder)
 		{
 			_nbrOfTimesToCheckIfLoginIsDone = nbrOfTimesToCheckIfLoginIsDone;
 			_nbrOfSecondsToWaitBetweenLoginChecks = nbrOfSecondsToWaitBetweenLoginChecks;
@@ -123,7 +132,8 @@ namespace Peco.Swedbank.Client
 
 			if (authId != null)
 			{
-				loginContext.LoginAuthId = doc.DocumentNode.SelectSingleNode("//input[@name='authid']").GetAttributeValue("value", "");
+				loginContext.LoginAuthId = doc.DocumentNode.SelectSingleNode("//input[@name='authid']")
+					.GetAttributeValue("value", "");
 			}
 		}
 
@@ -195,7 +205,8 @@ namespace Peco.Swedbank.Client
 			var doc = new HtmlDocument();
 			doc.LoadHtml(content);
 
-			var viewState = doc.DocumentNode.SelectSingleNode("//input[@name='javax.faces.ViewState']").GetAttributeValue("value", "");
+			var viewState = doc.DocumentNode.SelectSingleNode("//input[@name='javax.faces.ViewState']")
+				.GetAttributeValue("value", "");
 
 			var req = new HttpRequestMessage(HttpMethod.Post, SecondLoginActionUrl)
 			{
@@ -263,7 +274,8 @@ namespace Peco.Swedbank.Client
 			var doc = new HtmlDocument();
 			doc.LoadHtml(content);
 
-			loginContext.StartAuthId = doc.DocumentNode.SelectSingleNode("//input[@name='authid']").GetAttributeValue("value", "");
+			loginContext.StartAuthId = doc.DocumentNode.SelectSingleNode("//input[@name='authid']")
+				.GetAttributeValue("value", "");
 		}
 
 		private async Task<HttpResponseMessage> Send(HttpRequestMessage request)
@@ -278,13 +290,14 @@ namespace Peco.Swedbank.Client
 			req.Headers.Add("Upgrade-Insecure-Requests", "1");
 			req.Headers.Accept.TryParseAdd("text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
 			req.Headers.Host = "internetbank.swedbank.se";
-			req.Headers.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.111 Safari/537.36");
+			req.Headers.UserAgent.ParseAdd(
+				"Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.111 Safari/537.36");
 			req.Headers.Add("Origin", "https://internetbank.swedbank.se");
 		}
 
 		private static HttpClient CreateClient()
 		{
-			return new HttpClient(new HttpClientHandler { CookieContainer = new CookieContainer(), AllowAutoRedirect = false });
+			return new HttpClient(new HttpClientHandler {CookieContainer = new CookieContainer(), AllowAutoRedirect = false});
 		}
 
 		private class LoginContext
