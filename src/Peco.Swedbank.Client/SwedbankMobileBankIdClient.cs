@@ -290,8 +290,7 @@ namespace Peco.Swedbank.Client
 			req.Headers.Add("Upgrade-Insecure-Requests", "1");
 			req.Headers.Accept.TryParseAdd("text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
 			req.Headers.Host = "internetbank.swedbank.se";
-			req.Headers.UserAgent.ParseAdd(
-				"Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.111 Safari/537.36");
+			req.Headers.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36");
 			req.Headers.Add("Origin", "https://internetbank.swedbank.se");
 		}
 
