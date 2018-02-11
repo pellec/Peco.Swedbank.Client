@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
-using Peco.Swedbank.Client.Helpers;
 
 namespace Peco.Swedbank.Client.IntegrationTests
 {
@@ -12,7 +11,7 @@ namespace Peco.Swedbank.Client.IntegrationTests
 		[SetUp]
 		public void Setup()
 		{
-			_sut = new SwedbankMobileBankIdJsonClient("<civicnumber>", new SwedbankJsonTransactionBuilder(new TransactionDtoGenerateId()));
+			_sut = new SwedbankMobileBankIdJsonClient("<civicnumber>");
 		}
 
 		private ISwedbankClient _sut;

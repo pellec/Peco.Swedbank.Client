@@ -37,16 +37,18 @@ namespace Peco.Swedbank.Client
 
 		private readonly int _nbrOfTimesToCheckIfLoginIsDone;
 		private readonly ITransactionBuilder _transactionBuilder;
+		private readonly string _civicNumber;
 
 		private HttpClient _client;
 
-		public SwedbankMobileBankIdClient() : this(5, 6, new SwedbankHtmlTransactionBuilder(new TransactionDtoGenerateId()))
+		public SwedbankMobileBankIdClient(string civicNumber) : this(civicNumber, 5, 6, new SwedbankHtmlTransactionBuilder(new TransactionDtoGenerateId()))
 		{
 		}
 
-		public SwedbankMobileBankIdClient(int nbrOfTimesToCheckIfLoginIsDone, int nbrOfSecondsToWaitBetweenLoginChecks,
+		public SwedbankMobileBankIdClient(string civicNumber, int nbrOfTimesToCheckIfLoginIsDone, int nbrOfSecondsToWaitBetweenLoginChecks,
 			ITransactionBuilder transactionBuilder)
 		{
+			_civicNumber = civicNumber;
 			_nbrOfTimesToCheckIfLoginIsDone = nbrOfTimesToCheckIfLoginIsDone;
 			_nbrOfSecondsToWaitBetweenLoginChecks = nbrOfSecondsToWaitBetweenLoginChecks;
 			_transactionBuilder = transactionBuilder;
@@ -215,7 +217,7 @@ namespace Peco.Swedbank.Client
 				Content = new FormUrlEncodedContent(new[]
 				{
 					new KeyValuePair<string, string>("execution", "e1s2"),
-					new KeyValuePair<string, string>("auth:kundnummer", "8308253957"),
+					new KeyValuePair<string, string>("auth:kundnummer", _civicNumber),
 					new KeyValuePair<string, string>("auth:metod_2", "MOBILBID"),
 					new KeyValuePair<string, string>("auth:efield", "1"),
 					new KeyValuePair<string, string>("auth:fortsett_knapp", "Fortsätt"),

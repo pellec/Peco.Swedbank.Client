@@ -34,10 +34,10 @@ namespace Peco.Swedbank.Client
 		private static HttpClient _client;
 		private readonly CookieContainer _cookieContainer;
 
-		public SwedbankMobileBankIdJsonClient(string civicNumber, SwedbankJsonTransactionBuilder transactionBuilder)
+		public SwedbankMobileBankIdJsonClient(string civicNumber)
 		{
 			_civicNumber = civicNumber;
-			_transactionBuilder = transactionBuilder;
+			_transactionBuilder = new SwedbankJsonTransactionBuilder(new TransactionDtoGenerateId());
 			_cookieContainer = new CookieContainer();
 			_client = new HttpClient(new HttpClientHandler { CookieContainer = _cookieContainer, AllowAutoRedirect = false });
 		}
