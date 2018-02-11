@@ -56,7 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SwedbankMobileBankIdClientTests.cs" />
+    <Compile Include="SwedbankMobileBankIdJsonClientTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Peco.Swedbank.Client\Peco.Swedbank.Client.csproj">

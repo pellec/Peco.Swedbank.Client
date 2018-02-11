@@ -13,6 +13,7 @@ namespace Peco.Swedbank.Client.Helpers
 		IEnumerable<TransactionDto> Build(string content);
 	}
 
+
 	public class SwedbankHtmlTransactionBuilder : ITransactionBuilder
 	{
 		private readonly IGenerateId<TransactionDto> _idGenerator;

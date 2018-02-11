@@ -1,27 +1,27 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
+using Peco.Swedbank.Client.Helpers;
 
 namespace Peco.Swedbank.Client.IntegrationTests
 {
 	[TestFixture]
-	public class SwedbankMobileBankIdClientTests
+	public class SwedbankMobileBankIdJsonClientTests
 	{
 		[SetUp]
 		public void Setup()
 		{
-			_sut = new SwedbankMobileBankIdClient();
+			_sut = new SwedbankMobileBankIdJsonClient("<civicnumber>", new SwedbankJsonTransactionBuilder(new TransactionDtoGenerateId()));
 		}
 
-		private SwedbankMobileBankIdClient _sut;
+		private ISwedbankClient _sut;
 
 		[Test, Explicit]
 		public async Task ThisTestIsJustForVerifyingThatStuffWorks()
 		{
 			var accountId = "xxxx-x,xxx xxx xxx-x";
-			var result = (await _sut.GetTransactionsAsync(accountId));
+			var result = await _sut.GetTransactionsAsync(accountId).ConfigureAwait(false);
 
 			result.IsSuccess.Should().BeTrue();
 

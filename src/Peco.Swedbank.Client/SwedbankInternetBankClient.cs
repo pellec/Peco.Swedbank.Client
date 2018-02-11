@@ -84,7 +84,7 @@ namespace Peco.Swedbank.Client
 	            return Result.Fail<IReadOnlyCollection<TransactionDto>>(res.ReasonPhrase);
             }
 
-            return Result.Ok<IReadOnlyCollection<TransactionDto>>(_transactionBuilder.Build(await res.Content.ReadAsStringAsync()).ToArray()));
+            return Result.Ok<IReadOnlyCollection<TransactionDto>>(_transactionBuilder.Build(await res.Content.ReadAsStringAsync()).ToArray());
         }
 
         private static bool TryFindAccountUrl(string accountId, string html, out string url)

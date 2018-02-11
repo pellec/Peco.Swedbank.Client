@@ -12,6 +12,7 @@ using Peco.Swedbank.Client.Helpers;
 
 namespace Peco.Swedbank.Client
 {
+	[Obsolete("Swedbank updated their website in January 2018, so this is longer working")]
 	public class SwedbankMobileBankIdClient : ISwedbankClient
 	{
 		private const string LandingPageUrl = "https://internetbank.swedbank.se/bviPrivat/privat?_new_flow_=false";
