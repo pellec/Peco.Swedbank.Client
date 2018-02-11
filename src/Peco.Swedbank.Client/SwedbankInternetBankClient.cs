@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using CSharpFunctionalExtensions;
 using HtmlAgilityPack;
 using Peco.Swedbank.Client.Entities;
 using Peco.Swedbank.Client.Helpers;
@@ -56,13 +57,13 @@ namespace Peco.Swedbank.Client
             _client = new HttpClient(new HttpClientHandler { CookieContainer = new CookieContainer(), AllowAutoRedirect = false });
         }
 
-        public async Task<IEnumerable<TransactionDto>> GetTransactionsAsync(string accountId)
+        public async Task<Result<IReadOnlyCollection<TransactionDto>>> GetTransactionsAsync(string accountId)
         {
             CreateClient();
 
             if (string.IsNullOrEmpty(accountId))
             {
-                return Enumerable.Empty<TransactionDto>();
+	            return Result.Fail<IReadOnlyCollection<TransactionDto>>("Missing account");
             }
 
             accountId = accountId.Trim();
@@ -73,17 +74,17 @@ namespace Peco.Swedbank.Client
             string url;
             if (!TryFindAccountUrl(accountId, landingPageContent, out url))
             {
-                return Enumerable.Empty<TransactionDto>();
+	            return Result.Fail<IReadOnlyCollection<TransactionDto>>("Missing account");
             }
 
             var res = await Send(new HttpRequestMessage(HttpMethod.Get, string.Concat(BaseUrl, url)));
 
             if (!res.IsSuccessStatusCode)
             {
-                return Enumerable.Empty<TransactionDto>();
+	            return Result.Fail<IReadOnlyCollection<TransactionDto>>(res.ReasonPhrase);
             }
 
-            return _transactionBuilder.Build(await res.Content.ReadAsStringAsync());
+            return Result.Ok<IReadOnlyCollection<TransactionDto>>(_transactionBuilder.Build(await res.Content.ReadAsStringAsync()).ToArray()));
         }
 
         private static bool TryFindAccountUrl(string accountId, string html, out string url)

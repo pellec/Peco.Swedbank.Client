@@ -21,14 +21,16 @@ namespace Peco.Swedbank.Client.IntegrationTests
 		public async Task ThisTestIsJustForVerifyingThatStuffWorks()
 		{
 			var accountId = "xxxx-x,xxx xxx xxx-x";
-			var transactions = (await _sut.GetTransactionsAsync(accountId)).ToArray();
+			var result = (await _sut.GetTransactionsAsync(accountId));
 
-			foreach (var transaction in transactions)
+			result.IsSuccess.Should().BeTrue();
+
+			foreach (var transaction in result.Value)
 			{
 				Console.WriteLine(transaction.ToString());
 			}
 
-			transactions.Length.Should().BeGreaterThan(0);
+			result.Value.Count.Should().BeGreaterThan(0);
 		}
 	}
 }
